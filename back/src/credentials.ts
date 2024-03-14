@@ -1,4 +1,4 @@
-import "dotenv";
+import "dotenv/config";
 
 export const config = {
   region: "us-east-2",
