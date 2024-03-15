@@ -1,15 +1,17 @@
-import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
-import { config } from "./credentials";
+import express from "express";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import fastify from "fastify";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { z } from "zod";
+import config from "./credentials.ts";
 
 const queueUrl =
   "https://sqs.us-east-2.amazonaws.com/590184061505/PaymentsQueue";
 
-const app = fastify();
+const app = express();
 
-app.post("/payment", async (request, reply) => {
+app.use(express.json());
+
+app.post("/payment", async (request, response) => {
   const createPayloadSchema = z.object({
     idempotencyKey: z.string(),
     type: z.enum(["credit", "debit"]),
@@ -27,13 +29,14 @@ app.post("/payment", async (request, reply) => {
     });
     await sqsClient.send(command);
 
-    return reply.status(201).send({ message: "Payment requested" });
+    return response.status(201).json({ message: "Payment requested" });
   } catch (error) {
     console.error("An unexpected error occurred:", error);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-app.get("/payments", async (_, reply) => {
+app.get("/payments", async (_, response) => {
   const dbClient = new DynamoDBClient(config);
 
   const params = {
@@ -48,18 +51,17 @@ app.get("/payments", async (_, reply) => {
       amount: parseFloat(item.amount.N!),
     }));
 
-    return reply.status(201).send({ data: formattedItems });
+    return response.status(200).json({ data: formattedItems });
   } catch (error) {
     console.error("An unexpected error occurred:", error);
-    return { success: false, data: null };
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-app
-  .listen({
-    host: "0.0.0.0",
-    port: process.env.PORT ? Number(process.env.PORT) : 3000,
-  })
-  .then(() => {
-    console.log("HTTP Server Running");
-  });
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`HTTP Server Running on port ${PORT}`);
+});
+
+export default app;
