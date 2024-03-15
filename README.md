@@ -1,4 +1,4 @@
-*Projeto Full-Stack de Simulação de Transações Financeiras com Idempotência*
+**Projeto Full-Stack de Simulação de Transações Financeiras com Idempotência**
 
 Tecnologias Utilizadas:
 
