@@ -13,14 +13,16 @@ export const Transactions = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const getAllTransaction = async () => {
-    try {
-      const response = await api.get("/payments");
-
-      setAlltransaction(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching transactions:", error);
-      setLoading(false);
+    let success = false;
+    while (!success) {
+      try {
+        const response = await api.get("/payments");
+        setAlltransaction(response.data.data);
+        setLoading(false);
+        success = true;
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
     }
   };
 
@@ -31,7 +33,7 @@ export const Transactions = () => {
   return (
     <>
       {loading ? (
-        <p>Loading...</p>
+        <p>Carregando...</p>
       ) : (
         <ListContainer>
           <ul>
