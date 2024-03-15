@@ -15,7 +15,6 @@ export const Transactions = () => {
   const getAllTransaction = async () => {
     try {
       const response = await api.get("/payments");
-      console.log(response.data.data);
 
       setAlltransaction(response.data.data);
       setLoading(false);
