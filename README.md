@@ -1,6 +1,7 @@
-Projeto Full-Stack de Simulação de Transações Financeiras com Idempotência
+*Projeto Full-Stack de Simulação de Transações Financeiras com Idempotência*
 
 Tecnologias Utilizadas:
+
 
 Back-End:
 
@@ -13,6 +14,7 @@ AWS SQS: Criação de filas para comunicação assíncrona e resiliente.
 DynamoDB: Banco de dados NoSQL altamente escalável para armazenamento de informações de compra e chaves de idempotência.
 
 Jest: Framework de teste JavaScript para garantir a robustez do código no back-end.
+
 
 Front-End:
 
