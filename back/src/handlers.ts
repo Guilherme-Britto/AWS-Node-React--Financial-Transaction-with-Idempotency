@@ -1,20 +1,14 @@
-import express from "express";
+// File: handlers.ts
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { z } from "zod";
 import config from "./credentials.ts";
-import cors from "cors";
+import { Request, Response } from "express";
 
 const queueUrl =
   "https://sqs.us-east-2.amazonaws.com/590184061505/PaymentsQueue";
 
-const app = express();
-
-app.use(express.json());
-
-app.use(cors());
-
-app.post("/payment", async (request, response) => {
+const handlePaymentRequest = async (request: Request, response: Response) => {
   const createPayloadSchema = z.object({
     idempotencyKey: z.string(),
     type: z.enum(["credit", "debit"]),
@@ -37,9 +31,9 @@ app.post("/payment", async (request, response) => {
     console.error("An unexpected error occurred:", error);
     return response.status(500).json({ error: "Internal Server Error" });
   }
-});
+};
 
-app.get("/payments", async (_, response) => {
+const handlePaymentRetrieval = async (_: Request, response: Response) => {
   const dbClient = new DynamoDBClient(config);
 
   const params = {
@@ -59,12 +53,6 @@ app.get("/payments", async (_, response) => {
     console.error("An unexpected error occurred:", error);
     return response.status(500).json({ error: "Internal Server Error" });
   }
-});
+};
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`HTTP Server Running on port ${PORT}`);
-});
-
-export default app;
+export { handlePaymentRequest, handlePaymentRetrieval };

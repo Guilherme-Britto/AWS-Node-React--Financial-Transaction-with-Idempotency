@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsup parcel src",
-    "start": "node dist/server.cjs",
+    "start": "node dist/app.cjs",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest dist/app.test.cjs"
   },
   "keywords": [],
