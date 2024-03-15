@@ -1,21 +1,21 @@
-**Projeto Full-Stack de Simulação de Transações Financeiras com Idempotência**
+**Full-Stack Project for Financial Transaction Simulation with Idempotency**
 
-Tecnologias Utilizadas:
+Technologies Used:
 
 
 **Back-End:**
 
-AWS Lambda: Assegurando a idempotência e gerenciando eficientemente a lógica de negócios.
+AWS SQS: Creating queues for asynchronous and resilient communication.
 
-Express.js: O pilar do servidor HTTP para lidar com solicitações do cliente.
+AWS Lambda: Ensuring idempotence and efficiently managing business logic.
 
-AWS SQS: Criação de filas para comunicação assíncrona e resiliente.
+DynamoDB: Highly scalable NoSQL database for storing purchase information and idempotency keys.
 
-DynamoDB: Banco de dados NoSQL altamente escalável para armazenamento de informações de compra e chaves de idempotência.
+Express.js: The backbone of the HTTP server for handling client requests.
 
-Jest: Framework de teste JavaScript para garantir a robustez do código no back-end.
+Jest: the JavaScript testing framework for populating DynamoDB.
 
 
 **Front-End:**
 
-React: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas e responsivas.
+React: JavaScript library for consuming API.
