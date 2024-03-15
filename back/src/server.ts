@@ -3,6 +3,7 @@ import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { z } from "zod";
 import config from "./credentials.ts";
+import cors from "cors";
 
 const queueUrl =
   "https://sqs.us-east-2.amazonaws.com/590184061505/PaymentsQueue";
@@ -10,6 +11,8 @@ const queueUrl =
 const app = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 app.post("/payment", async (request, response) => {
   const createPayloadSchema = z.object({
