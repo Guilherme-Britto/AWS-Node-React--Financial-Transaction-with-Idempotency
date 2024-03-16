@@ -1,32 +1,35 @@
-// File: handlers.ts
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import { z } from "zod";
-import config from "./credentials.ts";
+import config from "./credentials";
 import { Request, Response } from "express";
 
 const queueUrl =
-  "https://sqs.us-east-2.amazonaws.com/590184061505/PaymentsQueue";
+  "https://sqs.us-east-2.amazonaws.com/590184061505/payments-queue";
 
 const handlePaymentRequest = async (request: Request, response: Response) => {
-  const createPayloadSchema = z.object({
-    idempotencyKey: z.string(),
-    type: z.enum(["credit", "debit"]),
-    amount: z.number(),
-  });
+  const createPayloadSchema = z.array(
+    z.object({
+      idempotencyKey: z.string(),
+      type: z.enum(["credit", "debit"]),
+      amount: z.number(),
+    })
+  );
 
   const sqsClient = new SQSClient(config);
 
-  const payload = createPayloadSchema.parse(request.body);
+  const payloads = createPayloadSchema.parse(request.body);
 
   try {
-    const command = new SendMessageCommand({
-      MessageBody: JSON.stringify(payload),
-      QueueUrl: queueUrl,
-    });
-    await sqsClient.send(command);
+    for (const payload of payloads) {
+      const command = new SendMessageCommand({
+        MessageBody: JSON.stringify(payload),
+        QueueUrl: queueUrl,
+      });
+      await sqsClient.send(command);
+    }
 
-    return response.status(201).json({ message: "Payment requested" });
+    return response.status(200).json({ message: "Payments requested" });
   } catch (error) {
     console.error("An unexpected error occurred:", error);
     return response.status(500).json({ error: "Internal Server Error" });

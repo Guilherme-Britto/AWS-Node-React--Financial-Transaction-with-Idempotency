@@ -1,16 +1,13 @@
-// File: app.ts
 import express from "express";
-import { z } from "zod";
-import config from "./credentials.ts";
 import cors from "cors";
-import { handlePaymentRequest, handlePaymentRetrieval } from "./handlers.ts";
+import { handlePaymentRequest, handlePaymentRetrieval } from "./handlers.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.post("/payment", handlePaymentRequest);
+app.post("/payments", handlePaymentRequest);
 app.get("/payments", handlePaymentRetrieval);
 
 const PORT = process.env.PORT || 3000;
