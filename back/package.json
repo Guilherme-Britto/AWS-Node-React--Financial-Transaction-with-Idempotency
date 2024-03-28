@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "engines": {
     "node": "18"
   },
   "scripts": {
     "build": "tsup parcel src",
-    "start": "node dist/app.cjs",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest dist/app.test.cjs"
+    "start": "node dist/app.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest dist/app.test.js"
   },
   "keywords": [],
   "author": "",
