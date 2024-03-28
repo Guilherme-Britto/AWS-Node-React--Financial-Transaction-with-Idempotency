@@ -12,10 +12,10 @@ describe("POST /payment", () => {
       amount,
       type,
     });
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(202);
   };
 
-  test("should send 100  with 200 code", async () => {
+  test("Sending 100 Transactions with Expected 202 Response Codes", async () => {
     for (let i = 1; i <= 100; i++) {
       const idempotencyKey = i.toString();
       const amount = parseFloat((Math.random() * 1000).toFixed(2));
