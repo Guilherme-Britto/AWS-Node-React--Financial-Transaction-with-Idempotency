@@ -34,12 +34,13 @@ const handlePaymentRequest = async (request: Request, response: Response) => {
 const handlePaymentRetrieval = async (_: Request, response: Response) => {
   const dbClient = new DynamoDBClient(config);
 
-  const params = {
-    TableName: "payments",
-  };
-
   try {
-    const { Items = [] } = await dbClient.send(new ScanCommand(params));
+    const scanCommand = new ScanCommand({
+      TableName: "payments",
+    });
+
+    const { Items = [] } = await dbClient.send(scanCommand);
+
     const formattedItems = Items.map((item) => ({
       id: item.id.S,
       type: item.type.S,
